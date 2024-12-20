@@ -37,7 +37,7 @@ To run this project, ensure you have the following installed on your system:
 
 2. **Create a Database:**
    - Open MySQL Workbench and connect to your local MySQL server (ensure it is up and running before attempting to connect).
-   - Create a new database by running the following SQL command:
+   - Create a new database by running the following SQL command (you can replace the name to_app with any name of your choice):
 
      ```sql
      CREATE DATABASE todo_app;
@@ -51,7 +51,7 @@ To run this project, ensure you have the following installed on your system:
      DATABASE_URL="mysql://username:password@localhost:3306/todo_app"
      ```
 
-     Replace `username` and `password` with your MySQL credentials.
+     Replace `username` and `password` with your MySQL credentials (username mostly root for locally managed servers).
 
 ### Initializing the Database with Prisma
 
