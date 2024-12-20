@@ -74,7 +74,7 @@ To run this project, ensure you have the following installed on your system:
 
 ### Running the API Server
 
-To start the API server, run the following command:
+To start the API server, run the following commands:
 
 ```bash
 tsc
