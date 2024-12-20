@@ -1,0 +1,23 @@
+{
+  "name": "to-do-app-back-end",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon dist/app.js"
+  },
+  "author": "Churchil Owino",
+  "license": "ISC",
+  "description": "A back-end app for Nooro Todo App",
+  "dependencies": {
+    "@prisma/client": "^6.1.0",
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "nodemon": "^3.1.9",
+    "prisma": "^6.1.0"
+  }
+}
