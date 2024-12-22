@@ -6,3 +6,6 @@ node_modules
 .env
 
 dist
+
+# Prisma migrations
+prisma/migrations
