@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+// Controller layer that handles validation of requests, parsing of inputs, and formatting of respones
 import { NextFunction, Request, Response } from "express";
-
-const taskClient = new PrismaClient().task;
+import * as taskModel from "../models/task.model";
 
 // Get All Tasks
 export const getAllTasks = async (req: Request, res: Response) => {
@@ -10,25 +9,14 @@ export const getAllTasks = async (req: Request, res: Response) => {
     const page = Number(req.query.page) || 1; // Default to page 1
     const pageSize = Number(req.query.pageSize) || 5; // Default to 5 items per page
 
-    // Fetch total count of tasks
-    const totalCount = await taskClient.count();
-
-    // Fetch total count of completed tasks
-    const completedCount = await taskClient.count({
-      where: { completed: true },
-    });
-
     // Fetch tasks with pagination
-    const allTasks = await taskClient.findMany({
-      take: pageSize,
-      skip: (page - 1) * pageSize,
-      orderBy: {
-        createdAt: "desc", // Order tasks by date of creation
-      },
-    });
+    const { tasks, totalCount, completedCount } = await taskModel.getAllTasks(
+      page,
+      pageSize
+    );
     res
       .status(200)
-      .json({ tasks: allTasks, total: totalCount, completed: completedCount });
+      .json({ tasks: tasks, total: totalCount, completed: completedCount });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -38,11 +26,7 @@ export const getAllTasks = async (req: Request, res: Response) => {
 export const getTaskById = async (req: Request, res: Response) => {
   try {
     const taskId = req.params.taskId;
-    const task = await taskClient.findUnique({
-      where: {
-        id: taskId,
-      },
-    });
+    const task = await taskModel.getTaskById(taskId);
     res.status(200).json({ data: task });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -73,9 +57,7 @@ export const createTask = async (
       return;
     }
 
-    const task = await taskClient.create({
-      data: { title, color },
-    });
+    const task = await taskModel.createTask(title, color);
 
     res.status(201).json({ data: task });
   } catch (error: any) {
@@ -102,16 +84,7 @@ export const updateTask = async (req: Request, res: Response) => {
         .json({ error: "Color is required and must be a string." });
       return;
     }
-    const task = await taskClient.update({
-      where: {
-        id: taskId,
-      },
-      data: {
-        title,
-        color,
-        completed,
-      },
-    });
+    const task = await taskModel.updateTask(taskId, title, color, completed);
     res.status(200).json({ data: task });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -122,11 +95,7 @@ export const updateTask = async (req: Request, res: Response) => {
 export const deleteTask = async (req: Request, res: Response) => {
   try {
     const taskId = req.params.taskId;
-    const task = await taskClient.delete({
-      where: {
-        id: taskId,
-      },
-    });
+    await taskModel.deleteTask(taskId);
     res.status(200).json({ data: {} });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
