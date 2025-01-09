@@ -1,6 +1,6 @@
-# API Documentation for To-Do Application
+# API Documentation
 
-This is an API for the Nooro To-Do Take Home Technical Assessmemnt application built using **Node.js**, **Express.js**, and **TypeScript**, with **MySQL** as the database and **Prisma ORM** for database operations.
+This is an API for ProDay built using **Node.js**, **Express.js**, and **TypeScript**, with **MySQL** as the database and **Prisma ORM** for database operations.
 
 ## Getting Started
 
@@ -37,10 +37,10 @@ To run this project, ensure you have the following installed on your system:
 
 2. **Create a Database:**
    - Open MySQL Workbench and connect to your local MySQL server (ensure it is up and running before attempting to connect).
-   - Create a new database by running the following SQL command (you can replace the name todo_app with any name of your choice):
+   - Create a new database by running the following SQL command (you can replace the name pro_day with any name of your choice):
 
      ```sql
-     CREATE DATABASE todo_app;
+     CREATE DATABASE pro_day;
      ```
     - Alternatively, you can create a new database on MySQL Workbench by clicking on schemas and adding a new schema.
 
@@ -48,7 +48,7 @@ To run this project, ensure you have the following installed on your system:
    - Create a `.env` file in the root folder of the project and add the following environment variables:
 
      ```env
-     DATABASE_URL="mysql://username:password@localhost:3306/todo_app"
+     DATABASE_URL="mysql://username:password@localhost:3306/pro_day"
      ```
 
      Replace `username` and `password` with your MySQL credentials (username mostly root for locally managed servers).
@@ -70,7 +70,7 @@ To run this project, ensure you have the following installed on your system:
      ```
 
 3. **Verify Database Setup:**
-   - Open MySQL Workbench and check that the `todo_app` database contains the necessary tables as defined in the Prisma schema.
+   - Open MySQL Workbench and check that the `pro_day` database contains the necessary tables as defined in the Prisma schema.
 
 ### Running the API Server
 
