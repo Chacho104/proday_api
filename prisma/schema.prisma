@@ -13,12 +13,104 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Prisma data model for task
+// Prisma data model for User
+model User {
+  id          Int @id @default(autoincrement())
+  email       String? @unique // Nullabe for OAuth users, prompt user later to provide email
+  username    String? @unique // Nullable initially. Users to set after signing up
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  authMethods AuthMethod[]
+  tasks       Task[]
+  subTasks    SubTask[]
+  taskItems   TaskItem[]
+}
+
+// Prisma data model for AuthMethod
+model AuthMethod {
+  id             Int @id @default(autoincrement())
+  userId         Int
+  provider       String
+  providerId     String? // OAuth Id, nullable for email/password users
+  hashedPassword String? // Hashed password, nullbale for OAuth users
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user           User @relation(fields: [userId], references: [id])
+
+  @@index([userId]) // Index for the foreign key
+}
+
+// Prisma data model for Task
 model Task {
-  id        String   @id @default(uuid())
-  title     String   @db.VarChar(350)
-  color     String   @db.VarChar(100)
-  completed Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String         @id @default(uuid())
+  userId         Int
+  title          String         @db.VarChar(350)
+  difficulty     Int?           // Perceived difficulty level (1 to 5 scale)
+  importance     Int?           // Task importance (1 to 5 scale)
+  dueDate        DateTime?      // Must be within the current day (validated in app logic)
+  type           TaskType       @default(GENERAL) // Enum for task type (e.g., GENERAL, SHOPPING)
+  completed      Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  user           User           @relation(fields: [userId], references: [id])
+  subTasks       SubTask[]
+  taskItems      TaskItem[]     @relation("TaskItems") // TaskItems with a task parent
+
+  @@index([userId]) // Index for foreign key
+}
+
+// Prisma data model for Sub-task: can create a sub-task under a task
+model SubTask {
+  id          String      @id @default(uuid())
+  userId      Int
+  taskId      String
+  title       String       @db.VarChar(350)
+  completed   Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id])
+
+  tasks       Task         @relation(fields: [taskId], references: [id], onDelete: Cascade) // Cascade delete from task
+  taskItems   TaskItem[]   @relation("SubTaskItems") // TaskItems with a sub-task parent
+
+  @@index([taskId, userId]) // Index for foreign key
+}
+
+// Prisma data model for task item: can create a task item under a task or a sub-task
+model TaskItem {
+  id          String     @id @default(uuid())
+  userId      Int
+  parentType  ParentType
+  taskId      String?
+  subTaskId   String?
+  title       String     @db.VarChar(350)
+  completed   Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  user        User       @relation(fields: [userId], references: [id])
+
+  task        Task?      @relation("TaskItems", fields: [taskId], references: [id], onDelete: Cascade) // Task parent
+  subTask     SubTask?   @relation("SubTaskItems", fields: [subTaskId], references: [id], onDelete: Cascade) // Sub-task parent
+
+  @@index([taskId, subTaskId, userId]) // Index for foreign key
+}
+
+// Enum for parent types
+enum ParentType {
+  TASK
+  SUB_TASK
+}
+
+// Enum for task types
+enum TaskType {
+  GENERAL
+  WORK
+  PERSONAL
+  ERRAND
+  SHOPPING
+  OTHER
 }
