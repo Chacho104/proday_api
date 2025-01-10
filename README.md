@@ -1,6 +1,6 @@
-# API Documentation
+# Proday API Documentation
 
-This is an API for ProDay built using **Node.js**, **Express.js**, and **TypeScript**, with **MySQL** as the database and **Prisma ORM** for database operations.
+This is a RESTful API for ProDay built using **Node.js**, **Express.js**, and **TypeScript**, with **MySQL** as the database and **Prisma ORM** for database operations.
 
 ## Getting Started
 
@@ -85,7 +85,7 @@ The server will start running on [http://localhost:8080](http://localhost:8080).
 
 ### Testing the API
 
-You can test the API endpoints using tools like [Postman](https://www.postman.com/) or [cURL](https://curl.se/). Also now, if you spin up the Todo App frontend application, you should be able to interact with the API.
+You can test the API endpoints using tools like [Postman](https://www.postman.com/), [cURL](https://curl.se/), or the Proday web application (see the repository proday_web for detailed setup instructions).
 
 ## Learn More
 
