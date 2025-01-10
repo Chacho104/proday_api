@@ -88,7 +88,7 @@ export const signup = async (
 
   try {
     token = jwt.sign({ userId: newUser.id }, process.env.JWT_PRIVATE_KEY!, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
   } catch (err) {
     const error = new HttpError(
@@ -98,9 +98,7 @@ export const signup = async (
     return next(error);
   }
 
-  res
-    .status(201)
-    .json({ userId: newUser.id, email: newUser.email, token: token });
+  res.status(201).json({ token: token });
 };
 
 // Log in regular users - email and password using passport local strategy
@@ -186,7 +184,7 @@ export const login = async (
       { userId: userWithAuthMethod.id },
       process.env.JWT_PRIVATE_KEY!,
       {
-        expiresIn: "1h",
+        expiresIn: "7d",
       }
     );
   } catch (err) {
@@ -198,8 +196,6 @@ export const login = async (
   }
 
   res.status(200).json({
-    userId: userWithAuthMethod.id,
-    email: userWithAuthMethod.email,
     token: token,
   });
 };
