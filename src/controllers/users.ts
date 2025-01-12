@@ -45,7 +45,7 @@ export const signup = async (
 
   if (existingUser) {
     const error = new HttpError(
-      "User already exists, please login instead.",
+      "User already exists, please login instead!",
       422
     );
     return next(error);
@@ -140,7 +140,10 @@ export const login = async (
   }
   // No user found error
   if (!userWithAuthMethod) {
-    const error = new HttpError("User not found!", 404);
+    const error = new HttpError(
+      "User not found, please try different credentials or sign up!",
+      404
+    );
     return next(error);
   }
 
