@@ -216,6 +216,7 @@ export const getUser = async (
   try {
     user = await prisma.user.findUnique({
       where: { id: userId },
+      include: { tasks: true },
     });
   } catch (err) {
     const error = new HttpError(
@@ -231,6 +232,6 @@ export const getUser = async (
   }
 
   res.status(200).json({
-    user: user,
+    userData: { email: user.email, username: user.username, tasks: user.tasks },
   });
 };
