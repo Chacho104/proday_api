@@ -46,8 +46,8 @@ model Task {
   id             String         @id @default(uuid())
   userId         Int
   title          String         @db.VarChar(350)
-  difficulty     Int?           // Perceived difficulty level (1 to 5 scale)
-  importance     Int?           // Task importance (1 to 5 scale)
+  urgency        UrgencyType    // Enum for urgency type (either URGENT or NOT_URGENT)
+  importance     ImportanceType // Enum for importance type (either IMPORTANT or NOT_IMPORTANT)
   dueDate        DateTime?      // Must be within the current day (validated in app logic)
   type           TaskType       @default(GENERAL) // Enum for task type (e.g., GENERAL, SHOPPING)
   completed      Boolean        @default(false)
@@ -97,6 +97,18 @@ model TaskItem {
   subTask     SubTask?   @relation("SubTaskItems", fields: [subTaskId], references: [id], onDelete: Cascade) // Sub-task parent
 
   @@index([taskId, subTaskId, userId]) // Index for foreign key
+}
+
+// Enum for urgency types
+enum UrgencyType {
+  URGENT
+  NOT_URGENT
+}
+
+// Enum for importance types
+enum ImportanceType {
+  IMPORTANT
+  NOT_IMPORTANT
 }
 
 // Enum for parent types
