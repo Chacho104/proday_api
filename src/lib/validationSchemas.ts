@@ -51,18 +51,14 @@ export const taskValidationSchema = {
   },
   dueDate: {
     optional: true,
-    isDate: {
-      errorMessage: "Due date must be a valid date.",
+    trim: true, // Removes leading and trailing spaces
+    notEmpty: {
+      errorMessage: "Due date cannot be empty.",
     },
-    custom: {
-      options: (value: any) => {
-        const today = new Date();
-        return (
-          new Date(value).setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)
-        );
-      },
-      errorMessage: "Due date must be within today.",
+    isString: {
+      errorMessage: "Due date must be a string.",
     },
+    escape: true, // Escapes HTML and special characters to prevent XSS
   },
   type: {
     isIn: {
