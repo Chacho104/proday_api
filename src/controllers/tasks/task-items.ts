@@ -52,13 +52,15 @@ export const createTaskItem = async (
   // Just so we don't create a task item for a non-existing task/sub-task
   let parentExists;
   try {
-    if (parentType === "Task") {
+    if (parentType === "TASK") {
       parentExists = await prisma.task.findUnique({
         where: { id: parentId },
       });
+    } else {
+      parentExists = await prisma.subTask.findUnique({
+        where: { id: parentId },
+      });
     }
-
-    parentExists = await prisma.subTask.findUnique({ where: { id: parentId } });
   } catch (err) {
     const error = new HttpError(
       "Could not create the task item. Please try again!",
@@ -82,10 +84,11 @@ export const createTaskItem = async (
       newTaskItem = await prisma.taskItem.create({
         data: { title, userId, taskId: parentId, parentType },
       });
+    } else {
+      newTaskItem = await prisma.taskItem.create({
+        data: { title, userId, subTaskId: parentId, parentType },
+      });
     }
-    newTaskItem = await prisma.taskItem.create({
-      data: { title, userId, subTaskId: parentId, parentType },
-    });
   } catch (err) {
     const error = new HttpError(
       "Could not create the task item. Please try again!",
@@ -292,7 +295,7 @@ export const deleteTaskItem = async (
       where: {
         id: itemId,
         userId,
-        OR: [{ taskId: parentId, subTaskId: parentId }],
+        OR: [{ taskId: parentId }, { subTaskId: parentId }],
       },
     });
   } catch (err) {
