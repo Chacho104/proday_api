@@ -36,18 +36,17 @@ export const taskValidationSchema = {
     },
     escape: true, // Escapes HTML and special characters to prevent XSS
   },
-  difficulty: {
-    optional: true,
-    isInt: {
-      options: { min: 1, max: 5 },
-      errorMessage: "Difficulty level must be between 1 and 5.",
+  urgency: {
+    isIn: {
+      options: [["URGENT", "NOT_URGENT"]], // Enum values
+      errorMessage: "Task must be one of the following: URGENT, NOT_URGENT",
     },
   },
   importance: {
-    optional: true,
-    isInt: {
-      options: { min: 1, max: 5 },
-      errorMessage: "Importance level must be between 1 and 5.",
+    isIn: {
+      options: [["IMPORTANT", "NOT_IMPORTANT"]], // Enum values
+      errorMessage:
+        "Task must be one of the following: IMPORTANT, NOT_IMPORTANT",
     },
   },
   dueDate: {
