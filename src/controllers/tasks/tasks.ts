@@ -158,7 +158,7 @@ export const getTaskDetails = async (
   const taskId = req.params.taskId;
 
   // Validate existence of taskId
-  if (taskId) {
+  if (!taskId) {
     const error = new HttpError(
       "Task id is required to access this resource.",
       400
