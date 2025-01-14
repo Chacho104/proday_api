@@ -98,7 +98,7 @@ export const signup = async (
     return next(error);
   }
 
-  res.status(201).json({ token: token });
+  res.status(201).json({ userId: newUser.id, token: token });
 };
 
 // Log in regular users - email and password using passport local strategy
@@ -199,6 +199,7 @@ export const login = async (
   }
 
   res.status(200).json({
+    userId: userWithAuthMethod.id,
     token: token,
   });
 };
@@ -216,7 +217,6 @@ export const getUser = async (
   try {
     user = await prisma.user.findUnique({
       where: { id: userId },
-      include: { tasks: true },
     });
   } catch (err) {
     const error = new HttpError(
@@ -232,6 +232,6 @@ export const getUser = async (
   }
 
   res.status(200).json({
-    userData: { email: user.email, username: user.username, tasks: user.tasks },
+    user: user,
   });
 };
