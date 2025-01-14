@@ -36,7 +36,7 @@ export const createTask = async (
 
   const data = matchedData(req);
 
-  const { title, difficulty, importance, dueDate, type } = data;
+  const { title, urgency, importance, dueDate, type } = data;
 
   let newTask;
 
@@ -45,7 +45,7 @@ export const createTask = async (
       data: {
         userId,
         title,
-        difficulty,
+        urgency,
         importance,
         dueDate,
         type,
@@ -230,14 +230,14 @@ export const updateTask = async (
 
   const data = matchedData(req);
 
-  const { title, difficulty, importance, dueDate, type, completed } = data;
+  const { title, urgency, importance, dueDate, type, completed } = data;
 
   try {
     await prisma.task.update({
       where: { id: taskId, userId },
       data: {
         title,
-        difficulty,
+        urgency,
         importance,
         dueDate,
         type,
