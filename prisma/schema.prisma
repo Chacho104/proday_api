@@ -48,7 +48,7 @@ model Task {
   title          String         @db.VarChar(350)
   urgency        UrgencyType    // Enum for urgency type (either URGENT or NOT_URGENT)
   importance     ImportanceType // Enum for importance type (either IMPORTANT or NOT_IMPORTANT)
-  dueDate        DateTime?      // Must be within the current day (validated in app logic)
+  dueDate        String?        // Must be within the current day (validated in app logic)
   type           TaskType       @default(GENERAL) // Enum for task type (e.g., GENERAL, SHOPPING)
   completed      Boolean        @default(false)
   createdAt      DateTime       @default(now())
