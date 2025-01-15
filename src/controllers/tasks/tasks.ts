@@ -132,9 +132,11 @@ export const getAllTasks = async (
     return next(error);
   }
 
-  res
-    .status(200)
-    .json({ tasks: tasks, total: totalCount, completed: completedCount });
+  res.status(200).json({
+    tasks: tasks,
+    total: totalCount,
+    completed: completedCount,
+  });
 };
 
 // Get details of a selected task using the taskId
