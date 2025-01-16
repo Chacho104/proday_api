@@ -123,7 +123,6 @@ export const getAllSubTasks = async (
   try {
     subTasks = await prisma.subTask.findMany({
       where: { userId, taskId: parentTaskId },
-      include: { taskItems: true },
     });
   } catch (err) {
     const error = new HttpError(
@@ -168,8 +167,7 @@ export const getSubTaskDetails = async (
 
   try {
     subTaskDetails = await prisma.subTask.findUnique({
-      where: { id: subTaskId, userId, taskId }, // subTaskId is basically task id since in the end a sub-task is just a task
-      include: { taskItems: true },
+      where: { id: subTaskId, userId, taskId },
     });
   } catch (err) {
     const error = new HttpError(
@@ -233,9 +231,39 @@ export const updateSubTask = async (
         completed,
       },
     });
+
+    // Logic for auto updating the completion status of a task
+    // based on completion status of sub-tasks below it
+
+    // Get sub-tasks under the task with the given id
+    const siblingSubTasks = await prisma.subTask.findMany({
+      where: { taskId },
+      include: { subTaskItems: true },
+    });
+
+    // Check if sub-tasks and task items are complete
+
+    const allSiblingSubTasksComplete = siblingSubTasks.every(
+      (task) =>
+        task.completed === true &&
+        task.subTaskItems.every((item) => item.completed === true)
+    );
+
+    // If all sub-tasks and task items are complete, mark task as complete
+    if (allSiblingSubTasksComplete) {
+      await prisma.task.update({
+        where: { id: taskId, userId },
+        data: { completed: allSiblingSubTasksComplete },
+      });
+    } else {
+      await prisma.task.update({
+        where: { id: taskId, userId },
+        data: { completed: false },
+      });
+    }
   } catch (err) {
     const error = new HttpError(
-      "Could not fetch sub-task. Please try again!",
+      "Could not update sub-task. Please try again!",
       500
     );
     return next(error);
