@@ -119,10 +119,4 @@ export const taskItemValidationSchema = {
       errorMessage: "Completed must be a boolean value (true or false).",
     },
   },
-  parentType: {
-    isIn: {
-      options: [["TASK", "SUB_TASK"]], // Enum values
-      errorMessage: "Parent task type must be either TASK or SUB_TASK.",
-    },
-  },
 };
