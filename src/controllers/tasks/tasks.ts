@@ -214,7 +214,7 @@ export const updateTask = async (
   const taskId = req.params.taskId;
 
   // Validate existence of taskId
-  if (taskId) {
+  if (!taskId) {
     const error = new HttpError("Task id is required to update task.", 400);
     return next(error);
   }
