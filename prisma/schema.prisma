@@ -23,7 +23,7 @@ model User {
   authMethods AuthMethod[]
   tasks       Task[]
   subTasks    SubTask[]
-  taskItems   TaskItem[]
+  subTaskItems   SubTaskItem[]
 }
 
 // Prisma data model for AuthMethod
@@ -56,7 +56,6 @@ model Task {
 
   user           User           @relation(fields: [userId], references: [id])
   subTasks       SubTask[]
-  taskItems      TaskItem[]     @relation("TaskItems") // TaskItems with a task parent
 
   @@index([userId]) // Index for foreign key
 }
@@ -73,19 +72,17 @@ model SubTask {
 
   user        User         @relation(fields: [userId], references: [id])
 
-  tasks       Task         @relation(fields: [taskId], references: [id], onDelete: Cascade) // Cascade delete from task
-  taskItems   TaskItem[]   @relation("SubTaskItems") // TaskItems with a sub-task parent
+  task        Task         @relation(fields: [taskId], references: [id], onDelete: Cascade) // Cascade delete from task
+  subTaskItems   SubTaskItem[]   @relation("SubTaskItems") // TaskItems with a sub-task parent
 
   @@index([taskId, userId]) // Index for foreign key
 }
 
 // Prisma data model for task item: can create a task item under a task or a sub-task
-model TaskItem {
+model SubTaskItem {
   id          String     @id @default(uuid())
   userId      Int
-  parentType  ParentType
-  taskId      String?
-  subTaskId   String?
+  subTaskId   String
   title       String     @db.VarChar(350)
   completed   Boolean    @default(false)
   createdAt   DateTime   @default(now())
@@ -93,10 +90,9 @@ model TaskItem {
 
   user        User       @relation(fields: [userId], references: [id])
 
-  task        Task?      @relation("TaskItems", fields: [taskId], references: [id], onDelete: Cascade) // Task parent
-  subTask     SubTask?   @relation("SubTaskItems", fields: [subTaskId], references: [id], onDelete: Cascade) // Sub-task parent
+  subTask     SubTask   @relation("SubTaskItems", fields: [subTaskId], references: [id], onDelete: Cascade) // Sub-task parent
 
-  @@index([taskId, subTaskId, userId]) // Index for foreign key
+  @@index([subTaskId, userId]) // Index for foreign key
 }
 
 // Enum for urgency types
@@ -109,12 +105,6 @@ enum UrgencyType {
 enum ImportanceType {
   IMPORTANT
   NOT_IMPORTANT
-}
-
-// Enum for parent types
-enum ParentType {
-  TASK
-  SUB_TASK
 }
 
 // Enum for task types
