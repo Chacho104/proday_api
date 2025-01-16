@@ -117,7 +117,7 @@ export const getAllTasks = async (
       take: pageSize,
       skip: (page - 1) * pageSize,
       orderBy: { createdAt: "desc" },
-      include: { subTasks: { include: { taskItems: true } }, taskItems: true },
+      include: { subTasks: { include: { subTaskItems: true } } },
     });
   } catch (err) {
     const error = new HttpError(
@@ -172,7 +172,6 @@ export const getTaskDetails = async (
   try {
     task = await prisma.task.findUnique({
       where: { id: taskId, userId: userId },
-      include: { subTasks: true, taskItems: true },
     });
   } catch (err) {
     const error = new HttpError(
