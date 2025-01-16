@@ -3,7 +3,7 @@ import { Router } from "express";
 import tasksRouter from "./tasks/tasks";
 import usersRouter from "./users";
 import subTasksRouter from "./tasks/sub-tasks";
-import taskItemsRouter from "./tasks/task-items";
+import taskItemsRouter from "./tasks/sub-task-items";
 
 const routes = Router();
 
