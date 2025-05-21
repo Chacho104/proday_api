@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpError } from "../../models/http-error";
-import { PrismaClient } from "@prisma/client";
+
 import { matchedData, validationResult } from "express-validator";
+
+import { PrismaClient } from "../../../dist/generated/prisma";
 
 const prisma = new PrismaClient();
 
@@ -59,7 +61,7 @@ export const createTask = async (
     return next(error);
   }
 
-  res.status(201).json({ data: newTask });
+  res.status(201).json({ message: "Success! You have created a new task." });
 };
 
 // Get All Tasks
@@ -252,7 +254,7 @@ export const updateTask = async (
     );
     return next(error);
   }
-  res.status(200).json({ message: "Task successfully updated!" });
+  res.status(200).json({ message: "Success! The task has been updated!" });
 };
 
 // Delete a task
@@ -290,5 +292,5 @@ export const deleteTask = async (
     );
     return next(error);
   }
-  res.status(200).json({ message: "Task successfully deleted!" });
+  res.status(200).json({ message: "Success! The task has been deleted!" });
 };
