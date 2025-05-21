@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpError } from "../../models/http-error";
 import { matchedData, validationResult } from "express-validator";
-import { PrismaClient } from "@prisma/client";
+
+import { PrismaClient } from "../../../dist/generated/prisma";
 
 const prisma = new PrismaClient();
 
@@ -86,7 +87,9 @@ export const createSubTaskItem = async (
     return next(error);
   }
 
-  res.status(201).json({ data: newSubTaskItem });
+  res
+    .status(201)
+    .json({ message: "Success! You have created a new sub-task." });
 };
 
 // Get all task items for a specific parent task/sub-task using parent's Id
@@ -299,7 +302,9 @@ export const updateSubTaskItem = async (
     return next(error);
   }
 
-  res.status(200).json({ message: "Sub-task item successfully updated!" });
+  res
+    .status(200)
+    .json({ message: "Success! The sub-task item has been updated!" });
 };
 
 // Delete a task item
@@ -346,5 +351,7 @@ export const deleteSubTaskItem = async (
     );
     return next(error);
   }
-  res.status(200).json({ message: "Sub-task item successfully deleted!" });
+  res
+    .status(200)
+    .json({ message: "Success! The Sub-task item has been deleted!" });
 };
