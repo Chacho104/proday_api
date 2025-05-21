@@ -43,3 +43,5 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(8080);
+// Log to console that server is running
+console.log("Server is running on port 8080");
