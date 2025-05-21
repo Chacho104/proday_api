@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult, matchedData } from "express-validator";
 import bcrypt from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
 import { HttpError } from "../models/http-error";
+
+import { PrismaClient } from "../../dist/generated/prisma";
 
 const prisma = new PrismaClient();
 
@@ -98,7 +99,7 @@ export const signup = async (
     return next(error);
   }
 
-  res.status(201).json({ userId: newUser.id, token: token });
+  res.status(201).json({ token: token });
 };
 
 // Log in regular users - email and password using passport local strategy
